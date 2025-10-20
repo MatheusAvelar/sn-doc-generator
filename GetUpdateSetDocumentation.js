@@ -11,7 +11,7 @@ GetUpdateSetDocumentation.prototype = Object.extendsObject(AbstractAjaxProcessor
         // ===== Página Inicial =====
         var homeHtml = "";
         homeHtml += "<div style='text-align:center;margin-bottom:25px;padding:25px;background:#f1f8e9;border:1px solid #c5e1a5;border-radius:8px;'>";
-        homeHtml += "  <img src='https://dev278204.service-now.com/6be4c85cc330b2107859b11ed4013140.iix' alt='Petrobras Logo' style='width:300px;height:auto;margin-bottom:10px;' />";
+        homeHtml += "  <img src='https://dev278204.service-now.com/6be4c85cc330b2107859b11ed4013140.iix' alt='Logo' style='width:300px;height:auto;margin-bottom:10px;' />";
 
         // Título dinâmico baseado no input de Cenário
         homeHtml += "  <h1 id='tituloPrincipal' style='margin:0;font-size:24px;'>Documentação - ServiceNow</h1>";
@@ -40,7 +40,7 @@ GetUpdateSetDocumentation.prototype = Object.extendsObject(AbstractAjaxProcessor
         // Input de Cenário
         headerHtml += "<tr><td style='padding:4px;'><b>Cenário:</b> <input id='inputCenario' type='text' placeholder='Descreva o cenário testado' style='width:90%;border:none;border-bottom:1px solid #ccc;padding:2px;' oninput=\"(function(el){var t=document.getElementById('tituloPrincipal');var v=el.value.trim(); t.textContent = v ? 'Documentação - ' + v : 'Documentação - ServiceNow';})(this)\" onblur=\"(function(el){var t=document.getElementById('tituloPrincipal');var v=el.value.trim(); t.textContent = v ? 'Documentação - ' + v : 'Documentação - ServiceNow';})(this)\" /></td>";
         headerHtml += "<td style='padding:4px;'><b>Sistema:</b> ServiceNow</td></tr>";
-        headerHtml += "<tr><td style='padding:4px;'><b>Story:</b> <input type='text' placeholder='Número da story (ex: Petro-1234)' style='width:90%;border:none;border-bottom:1px solid #ccc;padding:2px;' /></td>";
+        headerHtml += "<tr><td style='padding:4px;'><b>Story:</b> <input type='text' placeholder='Número da story (ex: Story-1234)' style='width:90%;border:none;border-bottom:1px solid #ccc;padding:2px;' /></td>";
         headerHtml += "<td style='padding:4px;'><b>Update Set:</b> " + updateSetName + "</td></tr>";
         headerHtml += "</table>";
 
