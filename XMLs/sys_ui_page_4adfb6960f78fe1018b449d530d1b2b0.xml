@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<unload unload_date="2025-10-27 13:59:37">
+<sys_ui_page action="INSERT_OR_UPDATE">
+<category>general</category>
+<client_script/>
+<description/>
+<direct>false</direct>
+<endpoint/>
+<html><![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide">
+
+    <g:ui_form>
+        <div style="max-width:900px;margin:auto;padding:20px;font-family:Arial,sans-serif;">
+
+            <!-- Input nome do Update Set -->
+            <label for="updateSetInput"><b>Informe o nome do Update Set:</b></label>
+            <input type="text" id="updateSetInput" style="width:100%;padding:8px;margin-top:5px;margin-bottom:15px;
+                   border-radius:6px;border:1px solid #ccc;" />
+
+            <!-- Select público -->
+            <label for="audienceSelect"><b>Selecione o público:</b></label>
+            <select id="audienceSelect" style="width:100%;padding:8px;margin-top:5px;margin-bottom:15px;
+                    border-radius:6px;border:1px solid #ccc;">
+                <option value="dev">Desenvolvedor</option>
+                <option value="po">P.O.</option>
+            </select>
+
+            <!-- Botões -->
+            <div style="text-align:center;margin-top:15px;">
+                <button id="generateBtn" type="button" style="background:#4CAF50;color:#fff;padding:10px 18px;
+                        border:none;border-radius:6px;cursor:pointer;transition:background 0.3s;">
+                    ⚙️ Gerar Documentação
+                </button>
+
+                <button id="downloadBtn" type="button" style="background:#FF9800;color:#fff;padding:10px 18px;
+                        border:none;border-radius:6px;cursor:pointer;margin-left:10px;
+                        transition:background 0.3s;">
+                    ]]>💾<![CDATA[ Exportar PDF
+                </button>
+
+                <!-- Botão de anexar imagem (inicialmente oculto) -->
+                <button id="attachBtn" type="button" style="background:#2196F3;color:#fff;padding:10px 18px;
+                        border:none;border-radius:6px;cursor:pointer;margin-left:10px;
+                        transition:background 0.3s; display:none;">
+                    ]]>📎<![CDATA[ Anexar Imagem
+                </button>
+
+                <!-- Input invisível para upload -->
+                <input type="file" id="fileInput" accept="image/*" style="display:none;" />
+            </div>
+
+            <hr style="margin:30px 0;border:none;border-top:2px solid #eee;" />
+
+            <!-- Resultado -->
+            <div id="docResult" style="margin-top:20px;font-family:Arial, sans-serif; min-height:100px;"></div>
+
+            <!-- Pré-visualização das imagens -->
+            <div id="imagePreviewContainer" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:20px;"></div>
+
+        </div>
+
+        <script>
+            // ===== Função para gerar documentação =====
+            function generateDocumentation() {
+                var updateSet = document.getElementById("updateSetInput").value.trim();
+                if (!updateSet) {
+                    alert("Por favor, informe o nome do Update Set.");
+                    return;
+                }
+
+                var audience = document.getElementById("audienceSelect").value;
+                var docResult = document.getElementById("docResult");
+                docResult.innerHTML = "<p style='text-align:center;'><em>Gerando documentação...</em></p>";
+
+                var ga = new GlideAjax("GetUpdateSetDocumentation");
+                ga.addParam("sysparm_name", "getDocumentation");
+                ga.addParam("sysparm_update_set", updateSet);
+                ga.addParam("sysparm_audience", audience);
+                ga.getXMLAnswer(function(response) {
+                    docResult.innerHTML = response;
+
+                    // Mostra o botão de anexar imagem após gerar a documentação
+                    document.getElementById("attachBtn").style.display = "inline-block";
+
+                    window.scrollTo({
+                        top: 0,
+                        behavior: "smooth"
+                    });
+                });
+            }
+
+            // ===== Botão "Gerar Documentação" =====
+            document.getElementById("generateBtn").addEventListener("click", generateDocumentation);
+
+            // ===== Botão "Exportar PDF" =====
+            document.getElementById("downloadBtn").addEventListener("click", function() {
+                var contentDiv = document.getElementById("docResult");
+                if (!contentDiv.innerHTML.trim()) {
+                    alert("Nenhuma documentação gerada para exportar.");
+                    return;
+                }
+
+                var clone = contentDiv.cloneNode(true);
+                clone.querySelectorAll("input, textarea").forEach(function(el) {
+                    var value = el.value || el.placeholder || "";
+                    var span = document.createElement("span");
+                    span.style.borderBottom = "1px solid #ccc";
+                    span.style.padding = "2px 4px";
+                    span.textContent = value;
+                    el.parentNode.replaceChild(span, el);
+                });
+
+                var win = window.open("", "", "height=900,width=1000");
+                win.document.write("<html><head><title>Documentação</title>");
+                win.document.write("<style>table{border-collapse:collapse;width:100%;font-family:Arial,sans-serif;} th,td{border:1px solid #ccc;padding:8px;} th{background:#f2f2f2;}</style>");
+                win.document.write("</head><body>");
+                win.document.write(clone.innerHTML);
+                win.document.write("</body></html>");
+                win.document.close();
+                win.print();
+            });
+
+            // ===== Botão "Anexar Imagem" =====
+            document.getElementById("attachBtn").addEventListener("click", function() {
+                document.getElementById("fileInput").click();
+            });
+
+            // ===== Validação e pré-visualização da imagem =====
+            document.getElementById("fileInput").addEventListener("change", function(event) {
+                var file = event.target.files[0];
+                if (!file) return;
+
+                var extension = file.name.split(".").pop().toLowerCase();
+                var validExtensions = ["jpg", "jpeg", "png", "gif"];
+
+                if (!validExtensions.includes(extension)) {
+                    alert("Somente arquivos de imagem são permitidos (jpg, jpeg, png, gif).");
+                    event.target.value = "";
+                    return;
+                }
+
+                var container = document.createElement("div");
+                container.style.marginBottom = "12px";
+
+                var img = document.createElement("img");
+                img.src = URL.createObjectURL(file);
+                img.alt = file.name;
+                img.style.maxWidth = "800px";
+                img.style.maxHeight = "890px";
+                img.style.objectFit = "cover";
+                img.style.border = "1px solid #ccc";
+                img.style.borderRadius = "6px";
+                img.style.boxShadow = "0 2px 5px rgba(0,0,0,0.1)";
+                container.appendChild(img);
+
+                var inputText = document.createElement("input");
+                inputText.type = "text";
+                inputText.placeholder = "Adicione uma descrição para esta imagem...";
+                inputText.style.width = "100%";
+                inputText.style.marginTop = "6px";
+                inputText.style.padding = "6px";
+                inputText.style.borderRadius = "4px";
+                inputText.style.border = "1px solid #ccc";
+                container.appendChild(inputText);
+
+                document.getElementById("blocoEvidencias").appendChild(container);
+
+                alert("Imagem '" + file.name + "' aceita com sucesso!");
+            });
+        </script>
+
+    </g:ui_form>
+</j:jelly>]]></html>
+<name>Documentação de Update Sets</name>
+<processing_script/>
+<sys_class_name>sys_ui_page</sys_class_name>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2025-10-27 13:33:44</sys_created_on>
+<sys_id>4adfb6960f78fe1018b449d530d1b2b0</sys_id>
+<sys_mod_count>3</sys_mod_count>
+<sys_name>Documentação de Update Sets</sys_name>
+<sys_package display_value="Global" source="global">global</sys_package>
+<sys_policy/>
+<sys_scope display_value="Global">global</sys_scope>
+<sys_update_name>sys_ui_page_4adfb6960f78fe1018b449d530d1b2b0</sys_update_name>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2025-10-27 13:59:04</sys_updated_on>
+</sys_ui_page>
+</unload>
