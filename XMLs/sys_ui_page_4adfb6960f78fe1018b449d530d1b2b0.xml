@@ -1,4 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
+<unload unload_date="2025-10-27 13:59:37">
+<sys_ui_page action="INSERT_OR_UPDATE">
+<category>general</category>
+<client_script/>
+<description/>
+<direct>false</direct>
+<endpoint/>
+<html><![CDATA[<?xml version="1.0" encoding="utf-8"?>
 <j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide">
 
     <g:ui_form>
@@ -27,14 +35,14 @@
                 <button id="downloadBtn" type="button" style="background:#FF9800;color:#fff;padding:10px 18px;
                         border:none;border-radius:6px;cursor:pointer;margin-left:10px;
                         transition:background 0.3s;">
-                    💾 Exportar PDF
+                    ]]>💾<![CDATA[ Exportar PDF
                 </button>
 
                 <!-- Botão de anexar imagem (inicialmente oculto) -->
                 <button id="attachBtn" type="button" style="background:#2196F3;color:#fff;padding:10px 18px;
                         border:none;border-radius:6px;cursor:pointer;margin-left:10px;
                         transition:background 0.3s; display:none;">
-                    📎 Anexar Imagem
+                    ]]>📎<![CDATA[ Anexar Imagem
                 </button>
 
                 <!-- Input invisível para upload -->
@@ -162,4 +170,20 @@
         </script>
 
     </g:ui_form>
-</j:jelly>
+</j:jelly>]]></html>
+<name>Documentação de Update Sets</name>
+<processing_script/>
+<sys_class_name>sys_ui_page</sys_class_name>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2025-10-27 13:33:44</sys_created_on>
+<sys_id>4adfb6960f78fe1018b449d530d1b2b0</sys_id>
+<sys_mod_count>3</sys_mod_count>
+<sys_name>Documentação de Update Sets</sys_name>
+<sys_package display_value="Global" source="global">global</sys_package>
+<sys_policy/>
+<sys_scope display_value="Global">global</sys_scope>
+<sys_update_name>sys_ui_page_4adfb6960f78fe1018b449d530d1b2b0</sys_update_name>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2025-10-27 13:59:04</sys_updated_on>
+</sys_ui_page>
+</unload>
