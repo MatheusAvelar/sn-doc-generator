@@ -64,7 +64,7 @@
                 var docResult = document.getElementById("docResult");
                 docResult.innerHTML = "<p style='text-align:center;'><em>Gerando documentação...</em></p>";
 
-                var ga = new GlideAjax("GetUpdateSetDocumentationRenderizador");
+                var ga = new GlideAjax("GetUpdateSetDocumentation");
                 ga.addParam("sysparm_name", "getDocumentation");
                 ga.addParam("sysparm_update_set", updateSet);
                 ga.addParam("sysparm_audience", audience);
