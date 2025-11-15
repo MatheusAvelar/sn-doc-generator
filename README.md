@@ -52,6 +52,7 @@ Uma ferramenta para gerar **documentação automatizada** de Update Sets no Serv
 ---
 
 ### ⚙️ Principais Métodos do Script Include
+
 | Método | Descrição |
 |--------|-----------|
 | `getDocumentation()` | Gera o HTML completo da documentação. |
@@ -63,7 +64,31 @@ Uma ferramenta para gerar **documentação automatizada** de Update Sets no Serv
 
 ---
 
-### 🛠️ Como Usar
+## ⚠️ Pontos de Atenção Importantes
+
+Algumas pessoas relataram problemas **ao gerar a documentação**, onde o processo ficava travado em “Gerando documentação...” ou retornava HTML vazio.
+
+O motivo identificado foi:
+
+### **❗ Erro relacionado aos emojis usados como ícones**
+- Alguns navegadores (principalmente versões antigas ou modo compatibilidade).
+- Algumas configurações de segurança corporativas.
+- Algumas builds mais antigas do ServiceNow (UI16, early Rome, Quebec).
+
+Em certos ambientes, a função que insere os emojis (ex: `getIconByType()`) **quebra o HTML** ou gera erro silencioso no GlideAjax — impedindo o Script Include de retornar o conteúdo completo.
+
+#### ✔️ Possíveis soluções:
+- Substituir emojis por SVG inline.
+- Substituir por textos simples (ex: “SI”, “BR”, “UI”) em ambientes restritos.
+- Colocar try/catch na função `getIconByType()`.
+- Adicionar uma flag: `useIcons = false`.
+
+📌 *Recomendação:*  
+Durante a implantação, **testar a geração no ambiente** e verificar se o console registra algum erro relacionado a codificação UTF-8 ou caracteres não suportados.
+
+---
+
+## 🛠️ Como Usar
 1. Abra a **UI Page** no ServiceNow.
 2. Informe o nome do **Update Set**.
 3. Selecione o público (PO ou Dev).
@@ -73,14 +98,14 @@ Uma ferramenta para gerar **documentação automatizada** de Update Sets no Serv
 
 ---
 
-### 📌 Requisitos
+## 📌 Requisitos
 - Acesso à tabela `sys_update_xml` e tabelas de configuração de artefatos (`sys_script_include`, `sys_script`, `sys_ui_page`, `sys_db_object`, `sys_dictionary`, etc.).
 - Permissões de leitura nos registros do Update Set.
 - Navegador moderno para visualizar a UI Page.
 
 ---
 
-### 🎯 Benefícios
+## 🎯 Benefícios
 - Geração rápida e organizada de documentação de Update Sets.
 - Facilita comunicação entre desenvolvimento, QA e POs.
 - Suporte a evidências visuais na documentação.
@@ -88,6 +113,5 @@ Uma ferramenta para gerar **documentação automatizada** de Update Sets no Serv
 
 ---
 
-### 📖 License
+## 📖 License
 Este projeto é **open-source** e pode ser usado como base para personalizações em outros ambientes ServiceNow.
-
